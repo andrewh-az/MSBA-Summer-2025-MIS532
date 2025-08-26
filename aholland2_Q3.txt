@@ -1,0 +1,22 @@
+/*
+Query authorID: aholland2
+Query author name: Andrew Holland
+By submitting this assignment for grading, I affirm that the work submitted is
+my own work and I did not in any way receive unauthorized assistance from nor
+provide unauthorized assistance to another student (or external entity).
+*/
+select
+    ts.TYPE as "Book Type",
+    count(ts.TITLE) as "Num Books",
+    min(ts.PRICE) as "Lowest Book Price",
+    TO_CHAR(avg(ts.PRICE), '99,999') as "Average Price",
+    sum(ts.TOTAL_SALES) as "Total Qty Sold"
+from
+    pb.TITLES ts
+GROUP BY
+    TYPE
+having
+    avg(ts.PRICE) > 25
+order by    
+    sum(ts.TOTAL_SALES) desc
+;

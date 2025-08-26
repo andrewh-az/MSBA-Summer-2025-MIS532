@@ -1,0 +1,20 @@
+/*
+Query authorID: aholland2
+Query author name: Andrew Holland
+By submitting this assignment for grading, I affirm that the work submitted is
+my own work and I did not in any way receive unauthorized assistance from nor
+provide unauthorized assistance to another student (or external entity).
+*/
+select
+    ts.TITLE as "Book Title",
+    ps.PUB_NAME as "Publisher Name",
+    ps.CITY as "Publisher City"
+from
+    pb.TITLES ts
+join
+    pb.PUBLISHERS ps 
+        ON ps.PUB_ID = ts.PUB_ID
+where
+    ts.TOTAL_SALES < 1000
+    AND
+    ps.STATE = 'AZ';
