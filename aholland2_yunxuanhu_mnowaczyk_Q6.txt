@@ -1,0 +1,41 @@
+/*
+Query AuthorIDs: 
+aholland2, yunxuanhu, mnowaczyk
+Query Author Names: 
+Andrew Holland, Yunxuan Hu, Maddie Nowaczyk
+By submitting this assignment for grading, each member of the team affirms that
+the work submitted is our own work and we did not in any way receive
+unauthorized assistance from nor provide unauthorized assistance to another
+student (or external entity).
+*/
+With Ranking AS (
+select
+    ts.TITLE_ID as "Title ID",
+    ts.TITLE as "Book Title",
+    coalesce (ts.PRICE, 0) as "Price",
+    CASE
+        when ts.PRICE is not NULL
+        then RANK() over (order by ts.PRICE)
+        else NULL
+    END as "Rank",
+    CASE
+        when ts.PRICE is not NULL
+        then DENSE_RANK () over (order by ts.PRICE)
+        else NULL
+    END as "DenseRank"
+from
+    pb.TITLES ts
+inner join
+    pb.SALESDETAIL sd on sd.TITLE_ID = ts.TITLE_ID
+group by
+    ts.TITLE_ID, 
+    ts.TITLE, 
+    ts.PRICE
+)
+select 
+    *
+from
+    Ranking
+where
+    "DenseRank" <= 5
+;

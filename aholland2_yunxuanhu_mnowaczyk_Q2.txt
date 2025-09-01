@@ -1,0 +1,33 @@
+/*
+Query AuthorIDs: 
+aholland2, yunxuanhu, mnowaczyk
+Query Author Names: 
+Andrew Holland, Yunxuan Hu, Maddie Nowaczyk
+By submitting this assignment for grading, each member of the team affirms that
+the work submitted is our own work and we did not in any way receive
+unauthorized assistance from nor provide unauthorized assistance to another
+student (or external entity).
+*/
+select
+    pub.PUB_ID as "Publisher's Identifier",
+    pub.PUB_NAME as "Publisher's Name",
+    count(ts.title) as "Num Books",
+    avg(NVL(ts.TOTAL_SALES, 0)) as "Av. Qty Sold"
+from
+    pb.PUBLISHERS pub
+join
+    pb.TITLES ts on ts.PUB_ID = pub.PUB_ID
+where
+    pub.STATE LIKE 'A%'
+    OR pub.STATE LIKE 'C%'
+group by
+    pub.PUB_ID,
+    pub.PUB_NAME
+having
+    count(ts.TITLE) > 2
+    AND avg(NVL(ts.TOTAL_SALES, 0)) <= 5000
+    AND avg(NVL(ts.TOTAL_SALES, 0)) >= 2000 
+order by
+    count(ts.TITLE) DESC,
+    pub.PUB_NAME DESC
+;

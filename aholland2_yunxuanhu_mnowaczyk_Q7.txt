@@ -1,0 +1,23 @@
+/*
+Query AuthorIDs: 
+aholland2, yunxuanhu, mnowaczyk
+Query Author Names: 
+Andrew Holland, Yunxuan Hu, Maddie Nowaczyk
+By submitting this assignment for grading, each member of the team affirms that
+the work submitted is our own work and we did not in any way receive
+unauthorized assistance from nor provide unauthorized assistance to another
+student (or external entity).
+*/
+select
+    pub.PUB_NAME as "Publisher",
+    TO_CHAR(coalesce(sum(sd.QTY * ts.PRICE), 0), '$9,999,990.99') as "Total Revenue",
+    TO_CHAR(coalesce(sum(CASE WHEN ts.TYPE = 'business' THEN sd.QTY * ts.PRICE else 0 END), 0), '$9,999,990.99') as "Bus Revenue"
+from
+    pb.PUBLISHERS pub
+left join
+    pb.TITLES ts on ts.PUB_ID = pub.PUB_ID
+left join
+    pb.SALESDETAIL sd on sd.TITLE_ID = ts.TITLE_ID
+group by
+    pub.PUB_ID, pub.PUB_NAME
+;

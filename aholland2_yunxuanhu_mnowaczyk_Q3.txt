@@ -1,0 +1,41 @@
+/*
+Query AuthorIDs: 
+aholland2, yunxuanhu, mnowaczyk
+Query Author Names: 
+Andrew Holland, Yunxuan Hu, Maddie Nowaczyk
+By submitting this assignment for grading, each member of the team affirms that
+the work submitted is our own work and we did not in any way receive
+unauthorized assistance from nor provide unauthorized assistance to another
+student (or external entity).
+*/
+select
+    st.STOR_NAME as "Store Name",
+    count(DISTINCT ts.TITLE_ID) as "Number of Different Books Sold",
+    sum(sd.QTY) as "Number of Books Sold",
+    TO_CHAR(sum(sd.QTY * ts.PRICE), '$9,999,999.99') as "Revenue"
+from
+    pb.STORES st
+join
+    pb.SALESDETAIL sd on sd.STOR_ID = st.STOR_ID
+join
+    pb.TITLES ts on ts.TITLE_ID = sd.TITLE_ID
+group by
+    st.STOR_NAME, st.STOR_ID
+having 
+    count(DISTINCT sd.ORD_NUM) <= (
+        select
+            avg(orders_count.order_count)
+        from (
+            select 
+                count(sd2.ORD_NUM) as order_count
+            from 
+                pb.STORES st2
+            left join 
+                pb.SALESDETAIL sd2 on st2.STOR_ID = sd2.STOR_ID
+            group by 
+                st2.STOR_ID
+        ) orders_count
+    )
+order by
+    st.STOR_NAME
+;

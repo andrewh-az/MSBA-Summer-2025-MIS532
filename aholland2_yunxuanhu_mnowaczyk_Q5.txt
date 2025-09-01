@@ -1,0 +1,25 @@
+/*
+Query AuthorIDs: 
+aholland2, yunxuanhu, mnowaczyk
+Query Author Names: 
+Andrew Holland, Yunxuan Hu, Maddie Nowaczyk
+By submitting this assignment for grading, each member of the team affirms that
+the work submitted is our own work and we did not in any way receive
+unauthorized assistance from nor provide unauthorized assistance to another
+student (or external entity).
+*/
+select
+    coalesce(pub.PUB_NAME, '-') as "Publisher Name",
+    coalesce(ts.TITLE, '-') as "Book",
+    count(DISTINCT sd.ORD_NUM) as "Number of Orders"
+from
+    pb.TITLES ts
+left join
+    pb.PUBLISHERS pub on pub.PUB_ID = ts.PUB_ID
+left join
+    pb.SALESDETAIL sd on sd.TITLE_ID = ts.TITLE_ID
+group by
+    rollup (pub.PUB_NAME, ts.TITLE)
+order by
+    pub.PUB_NAME, ts.TITLE
+;

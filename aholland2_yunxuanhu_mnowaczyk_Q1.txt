@@ -1,0 +1,39 @@
+/*
+Query AuthorIDs: 
+aholland2, yunxuanhu, mnowaczyk
+Query Author Names: 
+Andrew Holland, Yunxuan Hu, Maddie Nowaczyk
+By submitting this assignment for grading, each member of the team affirms that
+the work submitted is our own work and we did not in any way receive
+unauthorized assistance from nor provide unauthorized assistance to another
+student (or external entity).
+*/
+select
+    ts.TITLE_ID as "Title ID",
+    ts.TYPE as "Book Type",
+    au.AU_ID as "Author ID",
+    au.AU_FNAME || ' ' || au.AU_LNAME as "Author Name",
+    au.STATE as "Author State",
+    TO_CHAR(SUM(sd.QTY * ts.PRICE), '$9,999,999.99') as "Expected Revenue"
+from
+    pb.titles ts
+join
+    pb.titleauthor ta on ta.TITLE_ID = ts.TITLE_ID
+join
+    pb.authors au on au.AU_ID = ta.AU_ID
+join
+    pb.salesdetail sd on ts.TITLE_ID = sd.TITLE_ID 
+where
+    ts.PRICE > 0 and sd.QTY > 0 and ta.AU_ORD = 1
+group by
+    ts.TITLE_ID,
+    ts.TYPE,
+    au.AU_ID,
+    au.AU_FNAME || ' ' || au.AU_LNAME,
+    au.STATE
+having
+    sum(sd.QTY * ts.PRICE) > 0
+order by
+     ts.TYPE desc,
+     min(au.AU_FNAME || ' ' || au.AU_LNAME) asc
+;
