@@ -1,7 +1,7 @@
 # MSBA-Summer-2025-MIS532
 Collection of SQL coursework from MIS 532 (Summer 2025) at the University of Arizona.
 ## Description
-This repository contains SQL code written in MySQL using book publishing data.  
+This repository contains SQL code written in Oracle using book publishing data.  
 The purpose of this assignment was to demonstrate proficiency in SQL through increasingly complex queries. 
 
 The queries were completed in two phases:
